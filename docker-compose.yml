@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: banque-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: banque
+      POSTGRES_USER: banque_user
+      POSTGRES_PASSWORD: banque_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - banque_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U banque_user -d banque"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  banque_data:
